@@ -159,6 +159,7 @@ export default function HeroSection() {
       )}
     </div>
   )
+<<<<<<< HEAD
 }
 
 function CreateNFTForm({
@@ -387,4 +388,5 @@ function CreateNFTForm({
       </div>
     </form>
   )
+
 }
