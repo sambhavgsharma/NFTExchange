@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create NFT</title>
+  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+</head>
+<body>
+  <h1>Create an NFT</h1>
+  <form id="nftForm">
+    <input type="file" id="fileInput" required />
+    <input type="text" id="nftName" placeholder="Name of NFT" required />
+    <input type="text" id="nftDescription" placeholder="Description" required />
+    <button type="submit">Mint NFT</button>
+  </form>
+
+  <script>
+    const PINATA_API_KEY = "eafb166f203222925221";
+    const PINATA_SECRET_API_KEY = "21b864d8ab68e3d967644e4ce96391ae659ec1b0c8cc7433c769265b61ec9439";
+    const CONTRACT_ADDRESS = "0xD676Fa15d161158400532b05c4fc4D0f62eDDD7B";
+
+    async function getABI() {
+      const res = await fetch("./abi/contractABI.json");
+      return await res.json();
+    }
+
+    document.getElementById("nftForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const file = document.getElementById("fileInput").files[0];
+      const name = document.getElementById("nftName").value;
+      const description = document.getElementById("nftDescription").value;
+
+      try {
+        // 1. Upload file to IPFS via Pinata
+        const fileData = new FormData();
+        fileData.append("file", file);
+
+        const fileRes = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+          method: "POST",
+          headers: {
+            pinata_api_key: PINATA_API_KEY,
+            pinata_secret_api_key: PINATA_SECRET_API_KEY
+          },
+          body: fileData
+        });
+
+        const fileResult = await fileRes.json();
+        const imageUrl = `ipfs://${fileResult.IpfsHash}`;
+
+        // 2. Upload metadata
+        const metadata = { name, description, image: imageUrl };
+        const metaRes = await fetch("https://api.pinata.cloud/pinning/pinJSONToIPFS", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            pinata_api_key: PINATA_API_KEY,
+            pinata_secret_api_key: PINATA_SECRET_API_KEY
+          },
+          body: JSON.stringify(metadata)
+        });
+
+        const metaResult = await metaRes.json();
+        const metadataUrl = `ipfs://${metaResult.IpfsHash}`;
+
+        // 3. Connect wallet
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+
+        // 4. Load ABI from external file
+        const CONTRACT_ABI = await getABI();
+
+        // 5. Interact with contract
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+        const tx = await contract.mintNFT(metadataUrl);
+        await tx.wait();
+
+        alert("NFT Minted Successfully!");
+      } catch (err) {
+        console.error(err);
+        alert("Failed to mint NFT.");
+      }
+    });
+  </script>
+</body>
+</html>

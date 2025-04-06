@@ -1,18 +1,17 @@
 export const MAIN_TABS = ['All', 'Art', 'Gaming', 'Memberships', 'PFPs', 'Photography']
 
-export const CAROUSEL_ITEMS = [
-  { image: '8.png', name: 'Collection Name', floor: '0.03ETH' },
-  { image: '1.png', name: 'Collection Name', floor: '0.03ETH' },
-  { image: '2.png', name: 'Collection Name', floor: '0.03ETH' },
-  { image: '3.png', name: 'Collection Name', floor: '0.03ETH' },
-  { image: '5.png', name: 'Collection Name', floor: '0.03ETH' },
-  { image: '6.png', name: 'Collection Name', floor: '0.03ETH' },
-  { image: '7.png', name: 'Collection Name', floor: '0.03ETH' },
-  { image: '9.png', name: 'Collection Name', floor: '0.03ETH' },
-  { image: '4.png', name: 'Collection Name', floor: '0.03ETH' },
-  { image: '10.jpg', name: 'Collection Name', floor: '0.03ETH' },
-  { image: '11.png', name: 'Collection Name', floor: '0.03ETH' },
-  { image: '12.jpg', name: 'Collection Name', floor: '0.03ETH' },
+export interface CarouselItem {
+  image: string
+  name: string
+  floor: string
+}
+
+export const CAROUSEL_ITEMS: CarouselItem[] = [
+  {
+    image: 'carousel/1.png',
+    name: 'Example NFT 1',
+    floor: '0.05 ETH'
+  },
 ]
 
 export const STATS_TABLE = [

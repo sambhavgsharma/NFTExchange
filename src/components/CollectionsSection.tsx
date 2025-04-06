@@ -8,7 +8,7 @@ import Container from './Container'
 const commonBiggerScreen = {
   centeredSlides: false,
   centeredSlidesBounds: false,
-  spaceBetween: 15,
+  spaceBetween: 24,
   slidesOffsetBefore: 0,
   slidesOffsetAfter: 0,
 }
@@ -19,10 +19,10 @@ export default function CollectionsSection({ title }: { title: string }) {
   }, [])
 
   return (
-    <Container className="pt-16">
-      <div className="flex items-center justify-between">
-        <span className="font-poppins text-lg font-semibold text-slate-900 md:text-2xl">{title}</span>
-        <Button>View All</Button>
+    <Container className="py-16">
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+        <Button variant="outline">View All</Button>
       </div>
 
       <div className="-mx-4 sm:mx-0">
@@ -35,7 +35,7 @@ export default function CollectionsSection({ title }: { title: string }) {
               slidesPerGroup: 1,
               centeredSlides: true,
               centeredSlidesBounds: true,
-              spaceBetween: 8,
+              spaceBetween: 16,
               slidesOffsetBefore: 16,
               slidesOffsetAfter: 16,
             },
@@ -46,42 +46,51 @@ export default function CollectionsSection({ title }: { title: string }) {
             1600: { slidesPerView: 6, slidesPerGroup: 6, ...commonBiggerScreen },
           }}
           navigation
-          className="collections-slide"
+          className="collections-slide !pb-12"
         >
           {shuffledData.map((item, i) => (
-            <SwiperSlide key={i}>
-            <div
-              className="cursor-pointer overflow-hidden rounded-2xl shadow duration-200 will-change-transform hover:-translate-y-1 hover:shadow-md sm:w-full"
-              key={i}
-            >
-              <div className="relative aspect-video">
-                <img src={`/carousel/${item.image}`} className="absolute inset-0 h-full w-full object-cover object-top" />
-              </div>
-              <div className="p-4">
-                <p className="font-semibold text-slate-900">{item.name}</p>
-          
-                <div className="mt-4 flex gap-x-8">
-                  <div>
-                    <p className="text-sm">Price</p>
-                    <p className="font-semibold text-slate-900">{item.floor} ETH</p>
-                  </div>
-                  <div>
-                    <p className="text-sm">Volume</p>
-                    <p className="font-semibold text-slate-900">{item.volume} ETH</p>
+            <SwiperSlide key={i} className="!h-auto">
+              <div className="h-full flex flex-col bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+                <div className="relative aspect-video overflow-hidden">
+                  <img 
+                    src={`/carousel/${item.image}`} 
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 hover:scale-105" 
+                    alt={item.name}
+                  />
+                </div>
+                <div className="p-4 flex-1 flex flex-col">
+                  <h3 className="font-semibold text-gray-900 mb-4">{item.name}</h3>
+                  
+                  <div className="mt-auto">
+                    <div className="flex justify-between mb-4">
+                      <div>
+                        <p className="text-xs text-gray-500">Price</p>
+                        <p className="font-medium text-gray-900">{item.floor} ETH</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Volume</p>
+                        <p className="font-medium text-gray-900">{item.volume} ETH</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button 
+                        variant="primary" 
+                        className="!px-3 !py-1.5 !text-sm flex-1"
+                      >
+                        Buy
+                      </Button>
+                      <Button 
+                        variant="secondary" 
+                        className="!px-3 !py-1.5 !text-sm flex-1"
+                      >
+                        Rent
+                      </Button>
+                    </div>
                   </div>
                 </div>
-          
-                <div className="mt-4 flex gap-2">
-                  <button className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700 transition">
-                    Buy
-                  </button>
-                  <button className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm text-white hover:bg-emerald-700 transition">
-                    Rent
-                  </button>
-                </div>
               </div>
-            </div>
-          </SwiperSlide>          
+            </SwiperSlide>          
           ))}
         </Swiper>
       </div>

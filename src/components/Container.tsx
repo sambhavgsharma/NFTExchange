@@ -8,5 +8,12 @@ export default function Container({
   children: ReactNode
   className?: HTMLAttributes<HTMLDivElement>['className']
 }) {
-  return <div className={twMerge('mx-auto max-w-8xl px-4 md:px-6 lg:px-8 2xl:px-14', className)}>{children}</div>
+  return (
+    <div className={twMerge(
+      'mx-auto max-w-8xl px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16',
+      className
+    )}>
+      {children}
+    </div>
+  )
 }
